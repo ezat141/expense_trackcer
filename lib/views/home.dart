@@ -5,6 +5,7 @@ import 'package:test_ui/constants.dart';
 import 'package:test_ui/core/utils/styles.dart';
 import 'package:test_ui/data/listdata.dart';
 import 'package:test_ui/data/model/add_date.dart';
+import 'package:test_ui/data/utlity.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -16,67 +17,93 @@ class Home extends StatefulWidget {
 class _HomeState extends State<Home> {
   var history;
   final box = Hive.box<Add_data>(kDataBox);
+  final List<String> day = [
+    'Monday',
+    "Tuesday",
+    "Wednesday",
+    "Thursday",
+    'friday',
+    'saturday',
+    'sunday'
+  ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-          child: CustomScrollView(
-        slivers: [
-          SliverToBoxAdapter(
-            child: SizedBox(height: 340, child: _head()),
-          ),
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 15),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Text(
-                    'Transactions History',
-                    style: Styles.styleBold18,
-                  ),
-                  Text(
-                    'See all',
-                    style: Styles.styleNormal14,
-                  )
-                ],
-              ),
-            ),
-          ),
-          SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (context, index) {
-                return get(index);
-              },
-              childCount: geter().length,
-            ),
-          ),
-        ],
-      )),
+          child: ValueListenableBuilder(
+              valueListenable: box.listenable(),
+              builder: (context, value, child) {
+                return CustomScrollView(
+                  slivers: [
+                    SliverToBoxAdapter(
+                      child: SizedBox(height: 340, child: _head()),
+                    ),
+                    SliverToBoxAdapter(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 15, vertical: 15),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Transactions History',
+                              style: Styles.styleBold18,
+                            ),
+                            Text(
+                              'See all',
+                              style: Styles.styleNormal14,
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                    SliverList(
+                      delegate: SliverChildBuilderDelegate(
+                        (context, index) {
+                          history = box.values.toList()[index];
+                          return getList(history, index);
+                        },
+                        childCount: box.length,
+                      ),
+                    ),
+                  ],
+                );
+              })),
     );
   }
 
-  ListTile get(int index) {
+  Widget getList(Add_data history, int index) {
+    return Dismissible(
+        key: UniqueKey(),
+        onDismissed: (direction) {
+          history.delete();
+        },
+        child: get(history, index));
+  }
+
+  ListTile get(Add_data history, int index) {
     return ListTile(
-                leading: ClipRRect(
-                  borderRadius: BorderRadius.circular(5),
-                  child: Image.asset(
-                    'assets/images/${geter()[index].image!}',
-                    height: 40,
-                  ),
-                ),
-                title: Text(
-                  geter()[index].name!,
-                  style: Styles.style16,
-                ),
-                subtitle: Text(
-                  geter()[index].time!,
-                  style: Styles.style13,
-                ),
-                trailing: Text(geter()[index].fee!,
-                    textAlign: TextAlign.right, style: Styles.styleBold18.copyWith(color: geter()[index].buy! ? Colors.green : Colors.red)),
-              );
+      // leading: ClipRRect(
+      //   borderRadius: BorderRadius.circular(5),
+      //   child: Image.asset(
+      //     'assets/images/${history.name}.png',
+      //     height: 40,
+      //   ),
+      // ),
+      title: Text(
+        history.name,
+        style: Styles.style16,
+      ),
+      subtitle: Text(
+        '${day[history.datetime.weekday - 1]}  ${history.datetime.year}-${history.datetime.day}-${history.datetime.month}',
+        style: Styles.style13,
+      ),
+      trailing: Text(history.amount,
+          textAlign: TextAlign.right,
+          style: Styles.styleBold18.copyWith(
+              color: history.IN == 'INCOME' ? Colors.green : Colors.red)),
+    );
   }
 
   Widget _head() {
@@ -179,7 +206,7 @@ class _HomeState extends State<Home> {
                   child: Row(
                     children: [
                       Text(
-                        '\$ 5,000',
+                        '\$ ${total()}',
                         style: Styles.style25,
                       )
                     ],
@@ -245,11 +272,11 @@ class _HomeState extends State<Home> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        '\$ 1,840.00',
+                        '\$ ${income()}',
                         style: Styles.style20,
                       ),
                       Text(
-                        '\$ 284.00',
+                        '\$ ${expenses()}',
                         textAlign: TextAlign.right,
                         style: Styles.style20,
                       ),

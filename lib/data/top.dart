@@ -6,12 +6,12 @@ List<money> geter_top() {
   snap_food.image = 'youtube.png';
   snap_food.buy = true;
   snap_food.fee = '- \$ 100';
-  snap_food.name = 'Youtube';
+  snap_food.name = 'youtube';
   money snap = money();
   snap.image = 'transfer.png';
   snap.time = 'today';
   snap.buy = true;
-  snap.name = 'Transfer';
+  snap.name = 'transfer';
   snap.fee = '- \$ 60';
 
   return [snap_food, snap];

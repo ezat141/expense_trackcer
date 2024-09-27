@@ -21,7 +21,7 @@ class _Add_ScreenState extends State<Add_Screen> {
   String? selctedItemi;
   final List<String> _item = [
     'food',
-    "Transfer",
+    "transfer",
     "Transportation",
     "Education"
   ];
