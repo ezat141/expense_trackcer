@@ -87,4 +87,42 @@ List<Add_data> year() {
   return a;
 }
 
+int total_chart(List<Add_data> history2) {
+  List a = [0, 0];
+
+  for (var i = 0; i < history2.length; i++) {
+    a.add(history2[i].IN == 'Income'
+        ? int.parse(history2[i].amount)
+        : int.parse(history2[i].amount) * -1);
+  }
+  totals = a.reduce((value, element) => value + element);
+  return totals;
+}
+
+List time(List<Add_data> history2, bool hour) {
+  List<Add_data> a = [];
+  List total = [];
+  int counter = 0;
+  for (var c = 0; c < history2.length; c++) {
+    for (var i = c; i < history2.length; i++) {
+      if (hour) {
+        if (history2[i].datetime.hour == history2[c].datetime.hour) {
+          a.add(history2[i]);
+          counter = i;
+        }
+      } else {
+        if (history2[i].datetime.day == history2[c].datetime.day) {
+          a.add(history2[i]);
+          counter = i;
+        }
+      }
+    }
+    total.add(total_chart(a));
+    a.clear();
+    c = counter;
+  }
+  print(total);
+  return total;
+}
+
 
