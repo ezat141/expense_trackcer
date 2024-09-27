@@ -22,28 +22,24 @@ class _ChartState extends State<Chart> {
       case 0:
         a = today();
         b = true;
-        j = false;
+        j = true;
         break;
       case 1:
         a = week();
-        b = true;
-        j = false;
+        b = false;
+        j = true;
         break;
       case 2:
         a = month();
-        b = true;
-        j = false;
+        b = false;
+        j = true;
         break;
       case 3:
         a = year();
-        b = true;
+
         j = false;
         break;
       default:
-        a = today();
-        b = true;
-        j = false;
-        break;
     }
     return Container(
       width: double.infinity,

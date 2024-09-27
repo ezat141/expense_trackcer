@@ -102,7 +102,7 @@ class _HomeState extends State<Home> {
       trailing: Text(history.amount,
           textAlign: TextAlign.right,
           style: Styles.styleBold18.copyWith(
-              color: history.IN == 'INCOME' ? Colors.green : Colors.red)),
+              color: history.IN == 'Income' ? Colors.green : Colors.red)),
     );
   }
 

@@ -170,7 +170,7 @@ class _StatisticsState extends State<Statistics> {
                 trailing: Text(a[index].amount,
                     textAlign: TextAlign.right,
                     style: Styles.styleBold18.copyWith(
-                        color: a[index].IN == 'INCOME'
+                        color: a[index].IN == 'Income'
                             ? Colors.green
                             : Colors.red)),
               );
