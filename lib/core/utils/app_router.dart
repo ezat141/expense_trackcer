@@ -21,8 +21,5 @@ abstract class AppRouter{
       GoRoute(
         path: kAddView, 
         builder: (context, state) => const Add_Screen()),
-
-
-
     ]);
 }
