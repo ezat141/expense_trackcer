@@ -12,35 +12,30 @@ class Chart extends StatefulWidget {
 }
 
 class _ChartState extends State<Chart> {
+
+  // Helper method to fetch the relevant data based on the index
+  List<Add_data> fetchData(int index) {
+    switch (index) {
+      case 0:
+        return today();
+      case 1:
+        return week();
+      case 2:
+        return month();
+      case 3:
+        return year();
+      default:
+        return [];
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    List<Add_data>? a;
-    bool b = true;
-    bool j = true;
+    List<Add_data> data = fetchData(widget.index);
+    bool isHourly = widget.index == 0;
+    bool isDayView = widget.index < 3; // For today, week, and month views, use day/hour
+    List timeValues = time(data, isHourly);
 
-    switch (widget.index) {
-      case 0:
-        a = today();
-        b = true;
-        j = true;
-        break;
-      case 1:
-        a = week();
-        b = false;
-        j = true;
-        break;
-      case 2:
-        a = month();
-        b = false;
-        j = true;
-        break;
-      case 3:
-        a = year();
-
-        j = false;
-        break;
-      default:
-    }
     return Container(
       width: double.infinity,
       height: 300,
@@ -50,27 +45,20 @@ class _ChartState extends State<Chart> {
           SplineSeries<SalesData, String>(
             color: Color(0xff438883),
             width: 3,
-            dataSource: <SalesData>[
-              ...List.generate(time(a!, b ? true : false).length, (index) {
-                return SalesData(
-                    j
-                        ? b
-                            ? a![index].datetime.hour.toString()
-                            : a![index].datetime.day.toString()
-                        : a![index].datetime.month.toString(),
-                    b
-                        ? index > 0
-                            ? time(a!, true)[index] + time(a!, true)[index - 1]
-                            : time(a!, true)[index]
-                        : index > 0
-                            ? time(a!, false)[index] +
-                                time(a!, false)[index - 1]
-                            : time(a!, false)[index]);
-              })
-            ],
-            xValueMapper: (SalesData sales, _) => sales.year,
+            dataSource: List.generate(timeValues.length, (index) {
+              String label = isDayView
+                  ? isHourly
+                      ? data[index].datetime.hour.toString()
+                      : data[index].datetime.day.toString()
+                  : data[index].datetime.month.toString();
+              int salesValue = index > 0
+                  ? timeValues[index] + timeValues[index - 1]
+                  : timeValues[index];
+              return SalesData(label, salesValue);
+            }),
+            xValueMapper: (SalesData sales, _) => sales.label,
             yValueMapper: (SalesData sales, _) => sales.sales,
-          )
+          ),
         ],
       ),
     );
@@ -78,7 +66,8 @@ class _ChartState extends State<Chart> {
 }
 
 class SalesData {
-  SalesData(this.year, this.sales);
-  final String year;
+  SalesData(this.label, this.sales);
+  final String label;
   final int sales;
 }
+

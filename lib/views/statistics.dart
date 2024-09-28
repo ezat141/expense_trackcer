@@ -126,7 +126,10 @@ class _StatisticsState extends State<Statistics> {
                 ),
               ),
               SizedBox(height: 20),
-              Chart(index: index_color),
+              SizedBox(
+                height: 300,  // Define a fixed height for the Chart
+                child: Chart(index: index_color),
+              ),
               SizedBox(height: 20),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 15),
