@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:test_ui/core/utils/styles.dart';
-import 'package:test_ui/data/listdata.dart';
 import 'package:test_ui/data/model/add_date.dart';
-import 'package:test_ui/data/top.dart';
 import 'package:test_ui/data/utlity.dart';
 import 'package:test_ui/widgets/chart.dart';
 

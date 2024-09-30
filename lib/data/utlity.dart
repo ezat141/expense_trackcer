@@ -35,7 +35,7 @@ List<Add_data> filterByCondition(bool Function(Add_data) condition) {
 /// Entries for today
 List<Add_data> today() {
   DateTime now = DateTime.now();
-  return filterByCondition((entry) => entry.datetime.day == now.day && entry.datetime.month == now.month && entry.datetime.year == now.year);
+  return filterByCondition((entry) => entry.datetime.day == now.day);
 }
 
 /// Entries for the last 7 days (week)
@@ -47,7 +47,7 @@ List<Add_data> week() {
 
 List<Add_data> month() {
   DateTime now = DateTime.now();
-  return filterByCondition((entry) => entry.datetime.month == now.month && entry.datetime.year == now.year);
+  return filterByCondition((entry) => entry.datetime.month == now.month);
 }
 
 List<Add_data> year() {
