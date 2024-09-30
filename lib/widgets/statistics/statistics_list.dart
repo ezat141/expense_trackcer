@@ -3,9 +3,9 @@ import 'package:test_ui/core/utils/styles.dart';
 import 'package:test_ui/data/model/add_date.dart';
 
 class StatisticsList extends StatelessWidget {
-  final List<Add_data> items;
+  final List<Add_data> data;
 
-  const StatisticsList({super.key, required this.items});
+  const StatisticsList(this.data, {super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -21,23 +21,23 @@ class StatisticsList extends StatelessWidget {
             //   ),
             // ),
             title: Text(
-              items[index].name,
+              data[index].name,
               style: Styles.style16,
             ),
             subtitle: Text(
-              ' ${items[index].datetime.year}-${items[index].datetime.day}-${items[index].datetime.month}',
+              ' ${data[index].datetime.year}-${data[index].datetime.day}-${data[index].datetime.month}',
               style: Styles.style13,
             ),
             trailing: Text(
-              items[index].amount,
+              data[index].amount,
               textAlign: TextAlign.right,
               style: Styles.styleBold18.copyWith(
-                color: items[index].IN == 'Income' ? Colors.green : Colors.red,
+                color: data[index].IN == 'Income' ? Colors.green : Colors.red,
               ),
             ),
           );
         },
-        childCount: items.length,
+        childCount: data.length,
       ),
     );
   }

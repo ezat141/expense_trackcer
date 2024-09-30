@@ -1,17 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:test_ui/core/utils/styles.dart';
+import 'package:test_ui/cubits/statistics/statistics_cubit.dart';
 
 class StatisticsHeader extends StatelessWidget {
-  final List<String> day;
-  final int indexColor;
-  final Function(int) onTap;
+  final StatisticsSuccess state;
 
-  const StatisticsHeader({
-    super.key,
-    required this.day,
-    required this.indexColor,
-    required this.onTap,
-  });
+  const StatisticsHeader({super.key, required this.state});
+
+
+  
 
   @override
   Widget build(BuildContext context) {
@@ -19,21 +17,21 @@ class StatisticsHeader extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 15),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: List.generate(4, (index) {
+        children: List.generate(state.days.length, (index) {
           return GestureDetector(
-            onTap: () => onTap(index),
+            onTap: () => context.read<StatisticsCubit>().updateData(index),
             child: Container(
               height: 40,
               width: 80,
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(10),
-                color: indexColor == index ? const Color(0xFF438883) : Colors.white,
+                color: state.selectedIndex == index ? const Color(0xFF438883) : Colors.white,
               ),
               alignment: Alignment.center,
               child: Text(
-                day[index],
+                state.days[index],
                 style: Styles.style13.copyWith(
-                  color: indexColor == index ? Colors.white : Colors.black,
+                  color: state.selectedIndex == index ? Colors.white : Colors.black,
                 ),
               ),
             ),
