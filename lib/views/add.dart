@@ -1,110 +1,71 @@
+
 import 'package:flutter/material.dart';
-import 'package:hive_flutter/hive_flutter.dart';
-import 'package:test_ui/constants.dart';
-import 'package:test_ui/data/model/add_date.dart';
-import 'package:test_ui/widgets/Add/background_container.dart';
-import 'package:test_ui/widgets/Add/main_container.dart'; // Import MainContainer
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:test_ui/cubits/add_screen_cubit/add_screen_state.dart';
+import 'package:test_ui/widgets/Add/main_container.dart';
 
-class Add_Screen extends StatefulWidget {
-  const Add_Screen({super.key});
+import '../cubits/add_screen_cubit/add_screen_cubit.dart';
+import '../widgets/Add/background_container.dart';
 
-  @override
-  State<Add_Screen> createState() => _Add_ScreenState();
-}
-
-class _Add_ScreenState extends State<Add_Screen> {
-  final box = Hive.box<Add_data>(kDataBox);
-  DateTime date = DateTime.now();
+class Add_Screen extends StatelessWidget {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _amountController = TextEditingController();
-  final FocusNode _nameFocusNode = FocusNode();
-  final FocusNode _amountFocusNode = FocusNode();
-  String? selectedItem;
-  String? selectedItemIncomeExpense;
-
-  final List<String> _items = ['Food', 'Transfer', 'Transportation', 'Education'];
-  final List<String> _itemsIncomeExpense = ['Income', 'Expense'];
-
-  @override
-  void initState() {
-    super.initState();
-    _nameFocusNode.addListener(() {
-      setState(() {});
-    });
-    _amountFocusNode.addListener(() {
-      setState(() {});
-    });
-  }
-
-  @override
-  void dispose() {
-    _nameController.dispose();
-    _amountController.dispose();
-    _nameFocusNode.dispose();
-    _amountFocusNode.dispose();
-    super.dispose();
-  }
-
-  void _onSave() {
-    if (selectedItem != null && selectedItemIncomeExpense != null) {
-      var add = Add_data(
-        selectedItemIncomeExpense!,
-        _amountController.text,
-        date,
-        _nameController.text,
-        selectedItem!,
-      );
-      box.add(add);
-      Navigator.of(context).pop();
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.grey.shade100,
-      body: SafeArea(
-        child: Stack(
-          alignment: AlignmentDirectional.center,
-          children: [
-            BackgroundContainer(),
-            Positioned(
-              top: 120,
-              child: MainContainer(
-                nameController: _nameController,
-                nameFocusNode: _nameFocusNode,
-                amountController: _amountController,
-                amountFocusNode: _amountFocusNode,
-                items: _items,
-                selectedItem: selectedItem,
-                itemsIncomeExpense: _itemsIncomeExpense,
-                selectedItemIncomeExpense: selectedItemIncomeExpense,
-                date: date,
-                onSave: _onSave,
-                onDateChanged: (newDate) {
-                  setState(() {
-                    date = newDate;
-                  });
-                },
-                onItemSelected: (item) {
-                  setState(() {
-                    selectedItem = item;
-                  });
-                },
-                onIncomeExpenseSelected: (item) {
-                  setState(() {
-                    selectedItemIncomeExpense = item;
-                  });
-                },
+    return BlocProvider(
+      create: (context) => AddScreenCubit()..loadInitialData(),
+      child: BlocBuilder<AddScreenCubit, AddScreenState>(
+        builder: (context, state) {
+          if (state is AddScreenDataLoaded) {
+            return Scaffold(
+              backgroundColor: Colors.grey.shade100,
+              body: SafeArea(
+                child: Stack(
+                  alignment: AlignmentDirectional.center,
+                  children: [
+                    const BackgroundContainer(),
+                    Positioned(
+                      top: 120,
+                      child: MainContainer(
+                        nameController: _nameController,
+                        amountController: _amountController,
+                        date: state.date,
+                        selectedItem: state.selectedItem,
+                        selectedItemIncomeExpense:
+                            state.selectedItemIncomeExpense,
+                        items: state.items, // items list
+                        itemsIncomeExpense: state
+                            .itemsIncomeExpense, //  income/expense list
+
+                        onSave: () {
+                          context.read<AddScreenCubit>().saveData(
+                              _nameController.text, _amountController.text, context);
+                               // Pass context here
+                        },
+                        onDateChanged: (newDate) {
+                          context.read<AddScreenCubit>().updateDate(newDate);
+                        },
+                        onItemSelected: (item) {
+                          context
+                              .read<AddScreenCubit>()
+                              .updateSelectedItem(item);
+                        },
+                        onIncomeExpenseSelected: (item) {
+                          context
+                              .read<AddScreenCubit>()
+                              .updateSelectedItemIncomeExpense(item);
+                        },
+                      ),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ],
-        ),
+            );
+          }
+          return const Center(child: CircularProgressIndicator());
+        },
       ),
     );
   }
-
-  
 }
-
-

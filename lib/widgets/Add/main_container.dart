@@ -8,9 +8,7 @@ import 'package:test_ui/widgets/Add/save_widget.dart';
 
 class MainContainer extends StatelessWidget {
   final TextEditingController nameController;
-  final FocusNode nameFocusNode;
   final TextEditingController amountController;
-  final FocusNode amountFocusNode;
   final List<String> items;
   final String? selectedItem;
   final List<String> itemsIncomeExpense;
@@ -24,9 +22,7 @@ class MainContainer extends StatelessWidget {
   const MainContainer({
     super.key,
     required this.nameController,
-    required this.nameFocusNode,
     required this.amountController,
-    required this.amountFocusNode,
     required this.items,
     required this.selectedItem,
     required this.itemsIncomeExpense,
@@ -67,12 +63,10 @@ class MainContainer extends StatelessWidget {
           ),
           const SizedBox(height: 30),
           ExplainWidget(
-            ex: nameFocusNode,
             nameController: nameController,
           ),
           const SizedBox(height: 30),
           AmountWidget(
-            amountFocusNode: amountFocusNode,
             amountController: amountController,
           ),
           const SizedBox(height: 30),

@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 
 class ExplainWidget extends StatelessWidget {
-  final FocusNode ex;
   final TextEditingController nameController;
 
   const ExplainWidget({
     super.key,
-    required this.ex,
     required this.nameController
   });
 
@@ -15,7 +13,6 @@ class ExplainWidget extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: TextField(
-        focusNode: ex,
         controller: nameController,
         decoration: InputDecoration(
           contentPadding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),

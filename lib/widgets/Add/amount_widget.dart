@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 
 class AmountWidget extends StatelessWidget {
-  final FocusNode amountFocusNode;
   final TextEditingController amountController;
 
   const AmountWidget({
     super.key,
-    required this.amountFocusNode,
     required this.amountController,
   });
 
@@ -16,7 +14,6 @@ class AmountWidget extends StatelessWidget {
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: TextField(
         keyboardType: TextInputType.number,
-        focusNode: amountFocusNode,
         controller: amountController,
         decoration: InputDecoration(
           contentPadding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
