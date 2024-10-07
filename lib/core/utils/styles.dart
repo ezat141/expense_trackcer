@@ -32,7 +32,7 @@ abstract class Styles {
     height: 0,
   );
   static TextStyle style16 = TextStyle(
-    color: Color(0xFFD0E5E3),
+    color: const Color(0xFF2E7E78),
     fontSize: 16,
     fontFamily: 'Inter',
     fontWeight: FontWeight.w500,

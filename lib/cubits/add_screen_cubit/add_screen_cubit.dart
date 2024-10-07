@@ -66,9 +66,8 @@ class AddScreenCubit extends Cubit<AddScreenState> {
     }
   }
 
-  void saveData(String name, String amount,  BuildContext context) {
+  void saveData(String name, String amount, BuildContext context) {
     if (name.isEmpty || amount.isEmpty) {
-      // Show a validation error or handle it in the UI
       print("Name or amount cannot be empty");
       return;
     }
@@ -76,32 +75,19 @@ class AddScreenCubit extends Cubit<AddScreenState> {
     if (state is AddScreenDataLoaded) {
       final currentState = state as AddScreenDataLoaded;
 
-      // Create a new Add_data object
       final newData = Add_data(
-        currentState.selectedItemIncomeExpense ??
-            'Expense', // 'IN' or 'Expense' based on your logic
+        currentState.selectedItemIncomeExpense ?? 'Expense',
         amount,
         currentState.date,
-        currentState.selectedItem ?? 'No explanation',
         name,
+        currentState.selectedItem ?? 'No explanation',
       );
 
-      // Save the new Add_data object into Hive
       var box = Hive.box<Add_data>(kDataBox);
       box.add(newData);
+      emit(AddScreenDataSuccess());
 
       print("Data saved successfully");
-      Navigator.pop(context);
-
-      // Emit a new state if needed (for resetting fields, etc.)
-      emit(AddScreenDataLoaded(
-        date: DateTime.now(), // Reset to current date or default
-        selectedItem: null, // Reset selected item
-        selectedItemIncomeExpense: null, // Reset Income/Expense selector
-        items: currentState.items, // Pass the existing items back
-        itemsIncomeExpense:
-            currentState.itemsIncomeExpense, // Same for income/expense items
-      ));
     }
   }
 }

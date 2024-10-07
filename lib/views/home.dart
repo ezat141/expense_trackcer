@@ -1,62 +1,86 @@
 import 'package:flutter/material.dart';
-import 'package:hive/hive.dart';
-import 'package:hive_flutter/adapters.dart';
-import 'package:test_ui/constants.dart';
-import 'package:test_ui/data/model/add_date.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:test_ui/cubits/transaction_cubit/transaction_cubit.dart';
 import 'package:test_ui/widgets/balance_card.dart';
 import 'package:test_ui/widgets/greeting_section.dart';
 import 'package:test_ui/widgets/transaction_header.dart';
 import 'package:test_ui/widgets/transaction_item.dart';
+import '../cubits/transaction_cubit/transaction_state.dart';
 
 class Home extends StatefulWidget {
-  const Home({super.key});
+  Home({super.key});
 
   @override
   State<Home> createState() => _HomeState();
 }
 
 class _HomeState extends State<Home> {
-  final box = Hive.box<Add_data>(kDataBox);
+  // late TransactionCubit transactionCubit;
+
+  @override
+  void initState() {
+    super.initState();
+    BlocProvider.of<TransactionCubit>(context).loadTransactions();
+
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-          child: ValueListenableBuilder(
-              valueListenable: box.listenable(),
-              builder: (context, value, child) {
-                return CustomScrollView(
-                  slivers: [
-                    SliverToBoxAdapter(
-                      child: SizedBox(height: 340, child: _buildHeader()),
-                    ),
-                    const SliverToBoxAdapter(
-                      child: TransactionHeader(),
-                    ),
-                    SliverList(
-                      delegate: SliverChildBuilderDelegate(
-                        (context, index) => TransactionItem(
-                            history: box.getAt(index)!, index: index),
-                        childCount: box.length,
-                      ),
-                    ),
-                  ],
-                );
-              })),
+      body: SafeArea(child: BlocBuilder<TransactionCubit, TransactionState>(
+        builder: (context, state) {
+          if (state is TransactionLoading) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (state is TransactionLoaded) {
+            return CustomScrollView(
+              slivers: [
+                SliverToBoxAdapter(
+                  child: SizedBox(
+                      height: 340,
+                      child: _buildHeader(state.totalBalance,
+                          state.totalIncome, state.totalExpenses)),
+                ),
+                const SliverToBoxAdapter(
+                  child: TransactionHeader(),
+                ),
+                SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                    (context, index) {
+                      final transaction = state.transactions[index];
+                      return TransactionItem(
+                        history: transaction,
+                        index: index,
+                      );
+                    },
+                    childCount: state.transactions.length,
+                  ),
+                ),
+              ],
+            );
+          } else if (state is TransactionError) {
+            return Center(child: Text(state.message));
+          } else {
+            return const Center(child: Text('No transactions available.'));
+          }
+        },
+      )),
     );
   }
 
-  Widget _buildHeader() {
-    return const Stack(
+  Widget _buildHeader(int totalBalance, int totalIncome, int totalExpenses) {
+    return Stack(
       children: [
-        GreetingSection(),
+        const GreetingSection(),
         Positioned(
           top: 160,
           left: 37,
-          child: BalanceCard(),
+          child: BalanceCard(
+            totalBalance: totalBalance,
+            totalIncome: totalIncome,
+            totalExpenses: totalExpenses,
+          ),
         )
       ],
     );
   }
 }
-

@@ -4,8 +4,12 @@ import 'package:test_ui/data/utlity.dart';
 import 'package:test_ui/widgets/incomeexpensesdetail.dart';
 
 class BalanceCard extends StatelessWidget {
+  final int totalBalance;
+  final int totalIncome;
+  final int totalExpenses;
+
   const BalanceCard({
-    super.key,
+    super.key, required this.totalBalance, required this.totalIncome, required this.totalExpenses,
   });
 
   @override
@@ -51,7 +55,7 @@ class BalanceCard extends StatelessWidget {
             child: Row(
               children: [
                 Text(
-                  '\$ ${total()}',
+                  '\$ $totalBalance',
                   style: Styles.style25,
                 )
               ],
@@ -60,20 +64,18 @@ class BalanceCard extends StatelessWidget {
           const SizedBox(
             height: 25,
           ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15),
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 15),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 IncomeExpensesDetail(
                     icon: Icons.arrow_downward,
                     label: 'Income',
-                    amount: income(),
                     iconColor: Colors.white),
                 IncomeExpensesDetail(
                     icon: Icons.arrow_upward,
                     label: 'Expenses',
-                    amount: expenses(),
                     iconColor: Colors.white),
                 
               ],
@@ -87,8 +89,8 @@ class BalanceCard extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                amount(income()),
-                amount(expenses()),
+                amount(totalIncome),
+                amount(totalExpenses),
                 
               ],
             ),

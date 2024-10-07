@@ -5,13 +5,11 @@ import 'package:test_ui/core/utils/styles.dart';
 class IncomeExpensesDetail extends StatelessWidget {
   final IconData icon;
   final String label;
-  final int amount;
   final Color iconColor;
   const IncomeExpensesDetail({
     super.key,
     required this.icon,
     required this.label,
-    required this.amount,
     required this.iconColor,
   });
 
@@ -33,7 +31,7 @@ class IncomeExpensesDetail extends StatelessWidget {
         ),
         Text(
           label,
-          style: Styles.style16,
+          style: Styles.style16.copyWith(color: Colors.white),
         )
       ],
     );

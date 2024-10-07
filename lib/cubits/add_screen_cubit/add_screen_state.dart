@@ -17,3 +17,5 @@ class AddScreenDataLoaded extends AddScreenState {
     required this.itemsIncomeExpense,
   });
 }
+
+class AddScreenDataSuccess extends AddScreenState {}
