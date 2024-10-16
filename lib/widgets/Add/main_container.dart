@@ -18,6 +18,7 @@ class MainContainer extends StatelessWidget {
   final ValueChanged<DateTime> onDateChanged;
   final ValueChanged<String?> onItemSelected;
   final ValueChanged<String?> onIncomeExpenseSelected;
+  final bool isDarkMode;
 
   const MainContainer({
     super.key,
@@ -32,6 +33,7 @@ class MainContainer extends StatelessWidget {
     required this.onDateChanged,
     required this.onItemSelected,
     required this.onIncomeExpenseSelected,
+    required this.isDarkMode,
   });
 
   @override
@@ -40,13 +42,15 @@ class MainContainer extends StatelessWidget {
       width: 340,
       height: 550,
       decoration: ShapeDecoration(
-        color: Colors.white,
+        color: isDarkMode
+            ? Colors.grey[800]
+            : Colors.white, // Change container color
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20),
         ),
-        shadows: const [
+        shadows: [
           BoxShadow(
-            color: Color(0x14000000),
+            color: isDarkMode ? Colors.black26 : Colors.grey.shade200,
             blurRadius: 35,
             offset: Offset(0, 22),
             spreadRadius: 0,
@@ -79,9 +83,13 @@ class MainContainer extends StatelessWidget {
           DateTimeWidget(
             date: date,
             onDateChanged: onDateChanged,
+            isDarkMode: isDarkMode,
           ),
           const Spacer(),
-          SaveWidget(onSave: onSave),
+          SaveWidget(
+            onSave: onSave,
+            isDarkMode: isDarkMode,
+          ),
           const SizedBox(height: 25),
         ],
       ),

@@ -5,7 +5,7 @@ class AmountWidget extends StatelessWidget {
 
   const AmountWidget({
     super.key,
-    required this.amountController,
+    required this.amountController, 
   });
 
   @override

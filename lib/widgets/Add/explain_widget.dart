@@ -5,7 +5,7 @@ class ExplainWidget extends StatelessWidget {
 
   const ExplainWidget({
     super.key,
-    required this.nameController
+    required this.nameController, 
   });
 
   @override

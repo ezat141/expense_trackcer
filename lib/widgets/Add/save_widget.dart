@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 
 class SaveWidget extends StatelessWidget {
   final VoidCallback onSave;
+  final bool isDarkMode;
 
   const SaveWidget({
     super.key,
-    required this.onSave,
+    required this.onSave, required this.isDarkMode,
   });
 
   @override
@@ -24,7 +25,7 @@ class SaveWidget extends StatelessWidget {
           'Save',
           style: TextStyle(
             fontWeight: FontWeight.w600,
-            color: Colors.white,
+            color: isDarkMode?  Colors.black : Colors.white,
             fontSize: 17,
           ),
         ),

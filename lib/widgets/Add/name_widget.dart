@@ -9,7 +9,7 @@ class NameWidget extends StatelessWidget {
     super.key,
     required this.selectedItem,
     required this.items,
-    required this.onChanged,
+    required this.onChanged, 
   });
 
   @override
@@ -37,9 +37,9 @@ class NameWidget extends StatelessWidget {
                 ),
               )
               .toList(),
-          hint: const Text(
+          hint: Text(
             'Name',
-            style: TextStyle(color: Color(0xffC5C5C5)),
+            style: TextStyle(color: Colors.grey.shade500),
           ),
           dropdownColor: Colors.white,
           isExpanded: true,

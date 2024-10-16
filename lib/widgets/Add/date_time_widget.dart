@@ -3,11 +3,12 @@ import 'package:flutter/material.dart';
 class DateTimeWidget extends StatelessWidget {
   final DateTime date;
   final Function(DateTime) onDateChanged;
+  final bool isDarkMode;
 
   const DateTimeWidget({
     super.key,
     required this.date,
-    required this.onDateChanged,
+    required this.onDateChanged, required this.isDarkMode,
   });
 
   @override
@@ -35,7 +36,7 @@ class DateTimeWidget extends StatelessWidget {
           'Date : ${date.year} / ${date.day} / ${date.month}',
           style: TextStyle(
             fontSize: 15,
-            color: Colors.black,
+            color: isDarkMode? Colors.grey.shade500 : Colors.black,
           ),
         ),
       ),

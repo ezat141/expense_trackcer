@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 class BackgroundContainer extends StatelessWidget {
-  const BackgroundContainer({super.key});
+  final bool isDarkMode;
+  const BackgroundContainer({super.key, required this.isDarkMode});
 
   @override
   Widget build(BuildContext context) {
@@ -30,18 +31,18 @@ class BackgroundContainer extends StatelessWidget {
                       onTap: () {
                         Navigator.of(context).pop();
                       },
-                      child: const Icon(Icons.arrow_back, color: Colors.white),
+                      child:  Icon(Icons.arrow_back, color: isDarkMode?  Colors.black: Colors.white,),
                     ),
-                    const Text(
+                    Text(
                       'Adding',
                       style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.w600,
-                          color: Colors.white),
+                          color: isDarkMode?  Colors.black : Colors.white,),
                     ),
-                    const Icon(
+                    Icon(
                       Icons.attach_file_outlined,
-                      color: Colors.white,
+                      color: isDarkMode?  Colors.black : Colors.white
                     ),
                   ],
                 ),
