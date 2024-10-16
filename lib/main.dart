@@ -4,6 +4,7 @@ import 'package:hive_flutter/adapters.dart';
 import 'package:test_ui/constants.dart';
 import 'package:test_ui/data/model/add_date.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:test_ui/views/splash.dart';
 import 'package:test_ui/widgets/bottomnavigationbar.dart';
 
 import 'cubits/transaction_cubit/transaction_cubit.dart';
@@ -12,6 +13,7 @@ void main() async {
   await Hive.initFlutter();
   Hive.registerAdapter(AdddataAdapter());
   await Hive.openBox<Add_data>(kDataBox);
+  await Hive.openBox('settingsBox');
   runApp(const MyApp());
 }
 
@@ -28,7 +30,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.teal,
         ),
-        home: const Bottom(),
+        home:  SplashView(),
       ),
     );
   }
